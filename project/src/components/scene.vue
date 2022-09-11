@@ -5,6 +5,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import * as THREE from 'three'; 
+import Planet from '../Planet'
  
 @Component<Scene>({
 })
@@ -14,27 +15,34 @@ export default class Scene extends Vue {
   private scene: THREE.Scene = new THREE.Scene();
   private earth!: THREE.Mesh; 
   private geometry!: THREE.SphereGeometry; 
-  private materialSun!: THREE.MeshBasicMaterial; 
+  private materialEarth!: THREE.MeshBasicMaterial; 
   private materialJupiter!: THREE.MeshBasicMaterial; 
   private materialVenus!: THREE.MeshBasicMaterial; 
-  private textureSun! : THREE.Texture; 
+  private textureEarth! : THREE.Texture; 
   private textureVenus! : THREE.Texture; 
   private textureJupiter! : THREE.Texture; 
   private backgroundScene! : THREE.Texture; 
   private jupiter! : THREE.Mesh; 
   private venus! : THREE.Mesh; 
+  private sun! : THREE.Mesh; 
  
   init(){
     this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
-    this.textureSun = new THREE.TextureLoader().load("/img/earth.jpg");
+    this.textureEarth = new THREE.TextureLoader().load("/img/earth.jpg");
     this.textureVenus = new THREE.TextureLoader().load("/img/venus.jpg");
     this.textureJupiter = new THREE.TextureLoader().load("/img/jupiter.jpg");
     this.geometry = new THREE.SphereGeometry(5, 50, 50);
-    this.materialSun = new THREE.MeshBasicMaterial({map : this.textureSun});
+    this.materialEarth = new THREE.MeshBasicMaterial({map : this.textureEarth});
     this.materialVenus = new THREE.MeshBasicMaterial({map : this.textureVenus});
     this.materialJupiter = new THREE.MeshBasicMaterial({map : this.textureJupiter});
+
+    const sun = new Planet(2, 16, "img/sun.jpg"); 
+    this.sun = sun.getMesh(); 
+    console.log(this.sun.position)
+    console.log(this.sun.isMesh)
+
     //mesh
-    this.earth = new THREE.Mesh(this.geometry, this.materialSun);
+    this.earth = new THREE.Mesh(this.geometry, this.materialEarth);
     this.jupiter = new THREE.Mesh(this.geometry, this.materialJupiter);
     this.venus = new THREE.Mesh(this.geometry, this.materialVenus)
     this.scene.background = this.backgroundScene; 
@@ -53,18 +61,16 @@ export default class Scene extends Vue {
     this.renderer.setPixelRatio(window.devicePixelRatio); 
     this.renderer.setClearColor(0xffffff, 1); 
     this.jupiter.position.setX(15); 
-    this.venus.position.setX(40); 
-    console.log(this.jupiter.position); 
-    console.log(this.earth.position); 
+    this.venus.position.setX(25); 
+ 
     
     container.appendChild(this.renderer.domElement);
 
-    solarSystem.add(this.jupiter, this.earth, this.venus)
+    solarSystem.add(this.jupiter, this.earth, this.venus, this.sun)
     this.scene.add (solarSystem);
   
     this.camera.position.setZ(100);
     this.camera.position.setX(1);
-    console.log(this.camera.position); 
 
     const animate = () => {
       requestAnimationFrame(animate);
