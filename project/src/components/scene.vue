@@ -13,43 +13,53 @@ export default class Scene extends Vue {
   private camera!: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
   private scene: THREE.Scene = new THREE.Scene();
-  private earth!: THREE.Mesh; 
-  private geometry!: THREE.SphereGeometry; 
-  private materialEarth!: THREE.MeshBasicMaterial; 
-  private materialJupiter!: THREE.MeshBasicMaterial; 
-  private materialVenus!: THREE.MeshBasicMaterial; 
-  private textureEarth! : THREE.Texture; 
-  private textureVenus! : THREE.Texture; 
-  private textureJupiter! : THREE.Texture; 
   private backgroundScene! : THREE.Texture; 
+
+  private earth!: THREE.Mesh; 
   private jupiter! : THREE.Mesh; 
   private venus! : THREE.Mesh; 
-  private sun! : THREE.Mesh; 
+  private sun! : THREE.Mesh;
+  private mars! : THREE.Mesh;
+  private saturne! : THREE.Mesh;  
+  private mercure! : THREE.Mesh; 
+  private neptune! : THREE.Mesh; 
+  private uranus! : THREE.Mesh;
  
   init(){
     this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
-    this.textureEarth = new THREE.TextureLoader().load("/img/earth.jpg");
-    this.textureVenus = new THREE.TextureLoader().load("/img/venus.jpg");
-    this.textureJupiter = new THREE.TextureLoader().load("/img/jupiter.jpg");
-    this.geometry = new THREE.SphereGeometry(5, 50, 50);
-    this.materialEarth = new THREE.MeshBasicMaterial({map : this.textureEarth});
-    this.materialVenus = new THREE.MeshBasicMaterial({map : this.textureVenus});
-    this.materialJupiter = new THREE.MeshBasicMaterial({map : this.textureJupiter});
 
-    const sun = new Planet(2, 16, "img/sun.jpg"); 
+    const earth = new Planet(5, 20, "img/earth.jpg"); 
+    this.earth = earth.getMesh(); 
+
+    const jupiter = new Planet(4, 30,"img/jupiter.jpg");
+    this.jupiter = jupiter.getMesh(); 
+
+    const sun = new Planet(6, 40, "img/sun.jpg"); 
     this.sun = sun.getMesh(); 
-    console.log(this.sun.position)
-    console.log(this.sun.isMesh)
 
-    //mesh
-    this.earth = new THREE.Mesh(this.geometry, this.materialEarth);
-    this.jupiter = new THREE.Mesh(this.geometry, this.materialJupiter);
-    this.venus = new THREE.Mesh(this.geometry, this.materialVenus)
+    const mars = new Planet(9, -20, "img/mars.jpg"); 
+    this.mars = mars.getMesh(); 
+
+    const saturne = new Planet(3, -35, "img/saturne.jpg")
+    this.saturne = saturne.getMesh(); 
+
+    const mercure = new Planet(5, -45, "img/mercure.jpg")
+    this.mercure = mercure.getMesh(); 
+
+    const venus = new Planet(2, 10,"img/venus.jpg"); 
+    this.venus = venus.getMesh(); 
+
+    const neptune = new Planet(4, 50,"img/neptune.jpg"); 
+    this.neptune = neptune.getMesh(); 
+
+    const uranus = new Planet(5, -50, "img/uranus.jpg"); 
+    this.uranus = uranus.getMesh(); 
+
     this.scene.background = this.backgroundScene; 
   }
 
   created(){
-    window.addEventListener('wheel', (event) => {this.camera.position.z += event.deltaY /500;  }); 
+    window.addEventListener('wheel', (event) => {this.camera.position.z += event.deltaY /500;}); 
   }
 
   mounted(){
@@ -60,13 +70,10 @@ export default class Scene extends Vue {
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio); 
     this.renderer.setClearColor(0xffffff, 1); 
-    this.jupiter.position.setX(15); 
-    this.venus.position.setX(25); 
  
-    
     container.appendChild(this.renderer.domElement);
 
-    solarSystem.add(this.jupiter, this.earth, this.venus, this.sun)
+    solarSystem.add(this.jupiter, this.earth, this.venus, this.sun, this.mars, this.mercure, this.saturne, this.neptune, this.uranus)
     this.scene.add (solarSystem);
   
     this.camera.position.setZ(100);
