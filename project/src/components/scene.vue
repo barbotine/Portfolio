@@ -15,47 +15,60 @@ export default class Scene extends Vue {
   private scene: THREE.Scene = new THREE.Scene();
   private backgroundScene! : THREE.Texture; 
 
-  private earth!: THREE.Mesh; 
-  private jupiter! : THREE.Mesh; 
-  private venus! : THREE.Mesh; 
   private sun! : THREE.Mesh;
-  private mars! : THREE.Mesh;
-  private saturne! : THREE.Mesh;  
   private mercure! : THREE.Mesh; 
-  private neptune! : THREE.Mesh; 
+  private venus! : THREE.Mesh; 
+  private earth!: THREE.Mesh; 
+  private mars! : THREE.Mesh;
+  private jupiter! : THREE.Mesh; 
+  private saturne! : THREE.Mesh;
   private uranus! : THREE.Mesh;
- 
+  private neptune! : THREE.Mesh; 
+  
+  private sunPlanet : Planet; 
+  private mercurePlanet : Planet;
+  private venusPlanet : Planet; 
+  private earthPlanet : Planet; 
+  private marsPlanet : Planet; 
+  private jupiterPlanet : Planet; 
+  private saturnePlanet : Planet; 
+  private uranusPlanet : Planet; 
+  private neptunePlanet : Planet; 
+  
   init(){
     this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
 
-    const earth = new Planet(5, 20, "img/earth.jpg"); 
-    this.earth = earth.getMesh(); 
+    const loader = new THREE.TextureLoader();
+    const bgTexture = loader.load('img/sky.jpg');
+  
+    this.sunPlanet = new Planet(6, 37, "img/sun.jpg"); 
+    this.sun = this.sunPlanet.getMesh(); 
 
-    const jupiter = new Planet(4, 30,"img/jupiter.jpg");
-    this.jupiter = jupiter.getMesh(); 
+    this.mercurePlanet = new Planet(5, -35, "img/mercure.jpg")
+    this.mercure = this.mercurePlanet.getMesh(); 
 
-    const sun = new Planet(6, 40, "img/sun.jpg"); 
-    this.sun = sun.getMesh(); 
+    this.venusPlanet= new Planet(2, 5,"img/venus.jpg"); 
+    this.venus = this.venusPlanet.getMesh(); 
 
-    const mars = new Planet(9, -20, "img/mars.jpg"); 
-    this.mars = mars.getMesh(); 
+    this.earthPlanet = new Planet(5, 15, "img/earth.jpg"); 
+    this.earth = this.earthPlanet.getMesh(); 
 
-    const saturne = new Planet(3, -35, "img/saturne.jpg")
-    this.saturne = saturne.getMesh(); 
+    this.marsPlanet = new Planet(9, -10, "img/mars.jpg"); 
+    this.mars = this.marsPlanet.getMesh(); 
+    
+    this.jupiterPlanet = new Planet(4, 25,"img/jupiter.jpg");
+    this.jupiter = this.jupiterPlanet.getMesh(); 
 
-    const mercure = new Planet(5, -45, "img/mercure.jpg")
-    this.mercure = mercure.getMesh(); 
+    this.saturnePlanet = new Planet(3, -25, "img/saturne.jpg")
+    this.saturne = this.saturnePlanet.getMesh(); 
 
-    const venus = new Planet(2, 10,"img/venus.jpg"); 
-    this.venus = venus.getMesh(); 
+    this.neptunePlanet = new Planet(4, 49,"img/neptune.jpg"); 
+    this.neptune = this.neptunePlanet.getMesh(); 
 
-    const neptune = new Planet(4, 50,"img/neptune.jpg"); 
-    this.neptune = neptune.getMesh(); 
+    this.uranusPlanet = new Planet(5, -47, "img/uranus.jpg"); 
+    this.uranus = this.uranusPlanet.getMesh(); 
 
-    const uranus = new Planet(5, -50, "img/uranus.jpg"); 
-    this.uranus = uranus.getMesh(); 
-
-    this.scene.background = this.backgroundScene; 
+    this.scene.background = bgTexture; 
   }
 
   created(){
@@ -81,12 +94,15 @@ export default class Scene extends Vue {
 
     const animate = () => {
       requestAnimationFrame(animate);
-      this.earth.rotation.x += 0.001;
-      this.earth.rotation.y += 0.001;
-      this.jupiter.rotation.x += 0.001;
-      this.jupiter.rotation.y += 0.001;
-      this.venus.rotation.x += 0.001;
-      this.venus.rotation.y += 0.001;
+      this.sunPlanet.rotatePlanete(this.sun)
+      this.mercurePlanet.rotatePlanete(this.mercure)
+      this.venusPlanet.rotatePlanete(this.venus)
+      this.earthPlanet.rotatePlanete(this.earth)
+      this.marsPlanet.rotatePlanete(this.mars)
+      this.jupiterPlanet.rotatePlanete(this.jupiter)
+      this.saturnePlanet.rotatePlanete(this.saturne)
+      this.uranusPlanet.rotatePlanete(this.uranus)
+      this.neptunePlanet.rotatePlanete(this.neptune)
       this.scene.background = this.backgroundScene; 
       this.renderer.render(this.scene, this.camera);
    };

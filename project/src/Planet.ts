@@ -1,4 +1,5 @@
 import * as THREE from "three"; 
+import { Mesh } from "three";
 
 
 export default class Planet {
@@ -27,5 +28,10 @@ export default class Planet {
 
     getTexture(){
         return this.textureFile; 
+    }
+
+    rotatePlanete(_mesh : THREE.Mesh){
+        _mesh.rotation.x += 0.001;
+        _mesh.rotation.y += 0.001;
     }
 }
