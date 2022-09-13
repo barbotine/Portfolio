@@ -15,6 +15,7 @@ export default class Scene extends Vue {
   private scene: THREE.Scene = new THREE.Scene();
   private backgroundScene! : THREE.Texture; 
 
+  //Mesh 
   private sun! : THREE.Mesh;
   private mercure! : THREE.Mesh; 
   private venus! : THREE.Mesh; 
@@ -25,6 +26,7 @@ export default class Scene extends Vue {
   private uranus! : THREE.Mesh;
   private neptune! : THREE.Mesh; 
   
+  //Planet
   private sunPlanet : Planet; 
   private mercurePlanet : Planet;
   private venusPlanet : Planet; 
@@ -35,12 +37,15 @@ export default class Scene extends Vue {
   private uranusPlanet : Planet; 
   private neptunePlanet : Planet; 
   
+  //Background
+  private skyBoxGeo : THREE.BoxGeometry; 
+  private skyBox : THREE.Mesh; 
+  private skyBoxMaterial : THREE.Material; 
+
   init(){
     this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
 
-    const loader = new THREE.TextureLoader();
-    const bgTexture = loader.load('img/sky.jpg');
-  
+    // Planet
     this.sunPlanet = new Planet(6, 37, "img/sun.jpg"); 
     this.sun = this.sunPlanet.getMesh(); 
 
@@ -68,7 +73,11 @@ export default class Scene extends Vue {
     this.uranusPlanet = new Planet(5, -47, "img/uranus.jpg"); 
     this.uranus = this.uranusPlanet.getMesh(); 
 
-    this.scene.background = bgTexture; 
+    //Background
+    this.skyBoxGeo = new THREE.BoxGeometry(10, 10, 10);
+    this.skyBoxMaterial = new THREE.MeshBasicMaterial({color:0x00ff00})
+    this.skyBox = new THREE.Mesh(this.skyBoxGeo, this.skyBoxMaterial);
+    this.skyBox.position.setY(20)
   }
 
   created(){
@@ -86,7 +95,7 @@ export default class Scene extends Vue {
  
     container.appendChild(this.renderer.domElement);
 
-    solarSystem.add(this.jupiter, this.earth, this.venus, this.sun, this.mars, this.mercure, this.saturne, this.neptune, this.uranus)
+    solarSystem.add(this.jupiter, this.earth, this.venus, this.sun, this.mars, this.mercure, this.saturne, this.neptune, this.uranus, this.skyBox)
     this.scene.add (solarSystem);
   
     this.camera.position.setZ(100);
@@ -103,6 +112,10 @@ export default class Scene extends Vue {
       this.saturnePlanet.rotatePlanete(this.saturne)
       this.uranusPlanet.rotatePlanete(this.uranus)
       this.neptunePlanet.rotatePlanete(this.neptune)
+
+      this.skyBox.rotation.x += 0.001;
+      this.skyBox.rotation.y += 0.001;
+
       this.scene.background = this.backgroundScene; 
       this.renderer.render(this.scene, this.camera);
    };
