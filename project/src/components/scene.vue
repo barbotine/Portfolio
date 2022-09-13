@@ -42,6 +42,30 @@ export default class Scene extends Vue {
   private skyBox : THREE.Mesh; 
   private skyBoxMaterial : THREE.Material; 
 
+   createPathStrings(fileName : string){
+  const basePathName = "img/background/"; 
+  const baseFileName = basePathName + fileName; 
+  const fileType = ".png"; 
+  const sides = ["bk", "dn",  "ft", "lf", "rt", "up"];
+  // 
+  const pathString = sides.map(side => {
+    return baseFileName + "_" + side + fileType;
+  });
+  return pathString;
+  }
+
+  createMaterialArray(filename : string){
+    const skyBoxImagePaths = this.createPathStrings(filename); 
+    const materialArray = skyBoxImagePaths.map(image => {
+      let texture = new THREE.TextureLoader().load(image); 
+      return new THREE.MeshBasicMaterial({map:texture, side: THREE.BackSide}); 
+    })
+    return materialArray; 
+  }
+
+
+ 
+
   init(){
     this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
 
@@ -73,10 +97,26 @@ export default class Scene extends Vue {
     this.uranusPlanet = new Planet(5, -47, "img/uranus.jpg"); 
     this.uranus = this.uranusPlanet.getMesh(); 
 
+    //Load textures
+    let materialArray = []; 
+    const ft = new THREE.TextureLoader().load("img/background/skybox_back.png");
+    const bk = new THREE.TextureLoader().load("img/background/skybox_down.png");
+    const up = new THREE.TextureLoader().load("img/background/skybox_front.png");
+    const dn = new THREE.TextureLoader().load("img/background/skybox_left.png");
+    const rt = new THREE.TextureLoader().load("img/background/skybox_right.png");
+    const lf = new THREE.TextureLoader().load("img/background/skybox_up.png");
+
+    materialArray.push(new THREE.MeshBasicMaterial({map : ft})); 
+    materialArray.push(new THREE.MeshBasicMaterial({map : bk}));
+    materialArray.push(new THREE.MeshBasicMaterial({map : up}));
+    materialArray.push(new THREE.MeshBasicMaterial({map : dn}));
+    materialArray.push(new THREE.MeshBasicMaterial({map : rt}));
+    materialArray.push(new THREE.MeshBasicMaterial({map : lf}));     
+
     //Background
     this.skyBoxGeo = new THREE.BoxGeometry(10, 10, 10);
     this.skyBoxMaterial = new THREE.MeshBasicMaterial({color:0x00ff00})
-    this.skyBox = new THREE.Mesh(this.skyBoxGeo, this.skyBoxMaterial);
+    this.skyBox = new THREE.Mesh(this.skyBoxGeo, materialArray);
     this.skyBox.position.setY(20)
   }
 
