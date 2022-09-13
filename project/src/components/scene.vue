@@ -42,30 +42,6 @@ export default class Scene extends Vue {
   private skyBox : THREE.Mesh; 
   private skyBoxMaterial : THREE.Material; 
 
-   createPathStrings(fileName : string){
-  const basePathName = "img/background/"; 
-  const baseFileName = basePathName + fileName; 
-  const fileType = ".png"; 
-  const sides = ["bk", "dn",  "ft", "lf", "rt", "up"];
-  // 
-  const pathString = sides.map(side => {
-    return baseFileName + "_" + side + fileType;
-  });
-  return pathString;
-  }
-
-  createMaterialArray(filename : string){
-    const skyBoxImagePaths = this.createPathStrings(filename); 
-    const materialArray = skyBoxImagePaths.map(image => {
-      let texture = new THREE.TextureLoader().load(image); 
-      return new THREE.MeshBasicMaterial({map:texture, side: THREE.BackSide}); 
-    })
-    return materialArray; 
-  }
-
-
- 
-
   init(){
     this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
 
@@ -99,12 +75,12 @@ export default class Scene extends Vue {
 
     //Load textures
     let materialArray = []; 
-    const ft = new THREE.TextureLoader().load("img/background/skybox_back.png");
-    const bk = new THREE.TextureLoader().load("img/background/skybox_down.png");
-    const up = new THREE.TextureLoader().load("img/background/skybox_front.png");
-    const dn = new THREE.TextureLoader().load("img/background/skybox_left.png");
-    const rt = new THREE.TextureLoader().load("img/background/skybox_right.png");
-    const lf = new THREE.TextureLoader().load("img/background/skybox_up.png");
+    const ft = new THREE.TextureLoader().load("img/background/space_bk.png");
+    const bk = new THREE.TextureLoader().load("img/background/space_dn.png");
+    const up = new THREE.TextureLoader().load("img/background/space_ft.png");
+    const dn = new THREE.TextureLoader().load("img/background/space_lf.png");
+    const rt = new THREE.TextureLoader().load("img/background/space_rt.png");
+    const lf = new THREE.TextureLoader().load("img/background/space_up.png");
 
     materialArray.push(new THREE.MeshBasicMaterial({map : ft})); 
     materialArray.push(new THREE.MeshBasicMaterial({map : bk}));
@@ -113,11 +89,16 @@ export default class Scene extends Vue {
     materialArray.push(new THREE.MeshBasicMaterial({map : rt}));
     materialArray.push(new THREE.MeshBasicMaterial({map : lf}));     
 
+    for (let i = 0; i<6; i++){
+      materialArray[i].side = THREE.BackSide; 
+    }
+
+
     //Background
-    this.skyBoxGeo = new THREE.BoxGeometry(10, 10, 10);
+    this.skyBoxGeo = new THREE.BoxGeometry(700, 700, 700);
     this.skyBoxMaterial = new THREE.MeshBasicMaterial({color:0x00ff00})
     this.skyBox = new THREE.Mesh(this.skyBoxGeo, materialArray);
-    this.skyBox.position.setY(20)
+    
   }
 
   created(){
@@ -128,7 +109,7 @@ export default class Scene extends Vue {
     this.init(); 
     const solarSystem = new THREE.Group(); 
     const container = this.$refs.scene as Element;
-    this.camera = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 1, 1000); 
+    this.camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 45, 30000); 
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio); 
     this.renderer.setClearColor(0xffffff, 1); 
@@ -153,7 +134,6 @@ export default class Scene extends Vue {
       this.uranusPlanet.rotatePlanete(this.uranus)
       this.neptunePlanet.rotatePlanete(this.neptune)
 
-      this.skyBox.rotation.x += 0.001;
       this.skyBox.rotation.y += 0.001;
 
       this.scene.background = this.backgroundScene; 
