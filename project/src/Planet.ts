@@ -26,14 +26,10 @@ export default class Planet {
         return this.mesh; 
     }
 
-    getTexture(){
-        return this.textureFile; 
-    }
-
     rotatePlanete(_mesh : THREE.Mesh){
         _mesh.rotation.x += 0.001;
         _mesh.rotation.y += 0.001;
     }
 
-    
+
 }

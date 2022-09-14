@@ -51,11 +51,10 @@ export default class Scene extends Vue {
   private skyBox : THREE.Mesh;
   private skyBoxMaterial : THREE.Material
 
-  init(){
-    this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
+   private solarSystem = new THREE.Group(); 
 
-    
-    this.sunPlanet = new Planet(15, 0, "img/sun.jpg"); 
+  initializePlanet(){
+     this.sunPlanet = new Planet(15, 0, "img/sun.jpg"); 
     this.sun = this.sunPlanet.getMesh(); 
 
     this.mercurePlanet = new Planet(2, 20, "img/mercure.jpg")
@@ -78,18 +77,20 @@ export default class Scene extends Vue {
     this.jupiter = this.jupiterPlanet.getMesh(); 
     this.jupiterGroup.add(this.jupiter)
 
-    this.saturnePlanet = new Planet(3, 75, "img/saturne.jpg")
+    this.saturnePlanet = new Planet(3, 65, "img/saturne.jpg")
     this.saturne = this.saturnePlanet.getMesh(); 
     this.saturneGroup.add(this.saturneGroup)
 
-    this.uranusPlanet = new Planet(3, 90, "img/uranus.jpg"); 
+    this.uranusPlanet = new Planet(4, 70, "img/uranus.jpg"); 
     this.uranus = this.uranusPlanet.getMesh(); 
     this.uranusGroup.add(this.uranus)
 
-    this.neptunePlanet = new Planet(3, 100,"img/neptune.jpg"); 
+    this.neptunePlanet = new Planet(4, 85,"img/neptune.jpg"); 
     this.neptune = this.neptunePlanet.getMesh(); 
     this.neptuneGroup.add(this.neptune)
+  }
 
+  createBackground(){
     //Load textures
     let materialArray = []; 
     const ft = new THREE.TextureLoader().load("img/background/space_bk.png");
@@ -110,56 +111,65 @@ export default class Scene extends Vue {
       materialArray[i].side = THREE.BackSide; 
     }
 
-    //Background
     this.skyBoxGeo = new THREE.BoxGeometry(700, 700, 700);
     this.skyBoxMaterial = new THREE.MeshBasicMaterial({color:0x00ff00})
     this.skyBox = new THREE.Mesh(this.skyBoxGeo, materialArray);
+  }
+
+  init(){
+    this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
+    this.initializePlanet(); 
+    this.createBackground(); 
   }
 
   created(){
     window.addEventListener('wheel', (event) => {this.camera.position.z += event.deltaY /500;}); 
   }
 
+  rotate(system : THREE.Group, coefEarthYear : number, earthYear : number){
+    system.rotation.y += (earthYear / coefEarthYear) *2; 
+  }
+
   mounted(){
     this.init(); 
-    const solarSystem = new THREE.Group(); 
+   
     const container = this.$refs.scene as Element;
-  
     this.camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 45, 30000); 
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio); 
     this.renderer.setClearColor(0xffffff, 1); 
  
     container.appendChild(this.renderer.domElement);
-
-    solarSystem.add(this.sun, this.mercuryGroup, this.venusGroup, this.earthGroup, this.marsGroup, this.jupiterGroup, this.saturneGroup, this.uranusGroup, this.neptuneGroup)
-    this.scene.add(this.skyBox, solarSystem);
+    this.solarSystem.add(this.sun,this.mercuryGroup, this.venusGroup, this.earthGroup, this.marsGroup, this.jupiterGroup, this.saturneGroup, this.uranusGroup, this.neptuneGroup)
+    this.scene.add(this.skyBox, this.solarSystem);
   
-    this.camera.position.setZ(100);
+    this.camera.position.setZ(120);
     this.camera.position.setX(1);
+  
 
-    // this.mercuryContainer.position.set(this.moonOrbitRadius, 0, 0);
-    // this.sunContainer.position.set(this.sunOrbitRadius, 0, 0);
     const EARTH_YEAR = 2 * Math.PI * (1/60) * (1/60); 
     const animate = () => {
-     
-
       this.sun.rotation.y += 0.001; 
-      this.mercuryGroup.rotation.y += EARTH_YEAR / 0.16 ; 
-      this.venusGroup.rotation.y += EARTH_YEAR / 0.70; 
-      this.earthGroup.rotation.y += EARTH_YEAR; 
-      this.marsGroup.rotation.y += EARTH_YEAR / 1.88 ; 
-      this.jupiterGroup.rotation.y += EARTH_YEAR / 12; 
-      this.saturneGroup.rotation.y += EARTH_YEAR / 29; 
-      this.uranusGroup.rotation.y += EARTH_YEAR / 84;
-      this.saturneGroup.rotation.y += EARTH_YEAR / 165;  
-     
+      this.mercurePlanet.rotatePlanete(this.saturne); 
+      this.venusPlanet.rotatePlanete(this.venus); 
+      this.earthPlanet.rotatePlanete(this.earth); 
+      this.rotate(this.mercuryGroup, 0.40, EARTH_YEAR); 
+      this.rotate(this.venusGroup, 0.70, EARTH_YEAR); 
+      this.rotate(this.earthGroup, 1, EARTH_YEAR); 
+      this.rotate(this.marsGroup, 1.88, EARTH_YEAR); 
+      this.rotate(this.jupiterGroup, 5, EARTH_YEAR); 
+      this.rotate(this.saturneGroup, 8, EARTH_YEAR); 
+      this.rotate(this.uranusGroup, 3, EARTH_YEAR); 
+      this.rotate(this.neptuneGroup, 7, EARTH_YEAR); 
+
       this.skyBox.rotation.y += 0.001;
 
-       requestAnimationFrame(animate);
+      requestAnimationFrame(animate);
       this.renderer.render(this.scene, this.camera);
    };
    animate();
+    console.log(this.mercuryGroup.position.x, this.mercuryGroup.position.y, this.mercuryGroup.position.z)
+    console.log(this.mercure.position.x, this.mercure.position.x, this.mercure.position.x)
   }
 
   destroyed(){
