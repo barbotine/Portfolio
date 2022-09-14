@@ -34,4 +34,6 @@ export default class Planet {
         _mesh.rotation.x += 0.001;
         _mesh.rotation.y += 0.001;
     }
+
+    
 }

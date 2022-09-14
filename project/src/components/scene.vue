@@ -36,42 +36,59 @@ export default class Scene extends Vue {
   private saturnePlanet : Planet; 
   private uranusPlanet : Planet; 
   private neptunePlanet : Planet; 
-  
+
+  private mercuryGroup = new THREE.Group();
+  private earthGroup = new THREE.Group();
+  private venusGroup = new THREE.Group();
+  private marsGroup = new THREE.Group();
+  private jupiterGroup = new THREE.Group();
+  private saturneGroup = new THREE.Group();
+  private uranusGroup = new THREE.Group();
+  private neptuneGroup = new THREE.Group();
+
   //Background
   private skyBoxGeo : THREE.BoxGeometry; 
-  private skyBox : THREE.Mesh; 
-  private skyBoxMaterial : THREE.Material; 
+  private skyBox : THREE.Mesh;
+  private skyBoxMaterial : THREE.Material
 
   init(){
     this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
 
-    // Planet
-    this.sunPlanet = new Planet(6, 37, "img/sun.jpg"); 
+    
+    this.sunPlanet = new Planet(15, 0, "img/sun.jpg"); 
     this.sun = this.sunPlanet.getMesh(); 
 
-    this.mercurePlanet = new Planet(5, -35, "img/mercure.jpg")
+    this.mercurePlanet = new Planet(2, 20, "img/mercure.jpg")
     this.mercure = this.mercurePlanet.getMesh(); 
+    this.mercuryGroup.add(this.mercure)
 
-    this.venusPlanet= new Planet(2, 5,"img/venus.jpg"); 
+    this.venusPlanet= new Planet(2, 25,"img/venus.jpg"); 
     this.venus = this.venusPlanet.getMesh(); 
+    this.venusGroup.add(this.venus)
 
-    this.earthPlanet = new Planet(5, 15, "img/earth.jpg"); 
+    this.earthPlanet = new Planet(5, 35, "img/earth.jpg"); 
     this.earth = this.earthPlanet.getMesh(); 
+    this.earthGroup.add(this.earth)
 
-    this.marsPlanet = new Planet(9, -10, "img/mars.jpg"); 
+    this.marsPlanet = new Planet(4, 45, "img/mars.jpg"); 
     this.mars = this.marsPlanet.getMesh(); 
+    this.marsGroup.add(this.mars)
     
-    this.jupiterPlanet = new Planet(4, 25,"img/jupiter.jpg");
+    this.jupiterPlanet = new Planet(4, 60,"img/jupiter.jpg");
     this.jupiter = this.jupiterPlanet.getMesh(); 
+    this.jupiterGroup.add(this.jupiter)
 
-    this.saturnePlanet = new Planet(3, -25, "img/saturne.jpg")
+    this.saturnePlanet = new Planet(3, 75, "img/saturne.jpg")
     this.saturne = this.saturnePlanet.getMesh(); 
+    this.saturneGroup.add(this.saturneGroup)
 
-    this.neptunePlanet = new Planet(4, 49,"img/neptune.jpg"); 
-    this.neptune = this.neptunePlanet.getMesh(); 
-
-    this.uranusPlanet = new Planet(5, -47, "img/uranus.jpg"); 
+    this.uranusPlanet = new Planet(3, 90, "img/uranus.jpg"); 
     this.uranus = this.uranusPlanet.getMesh(); 
+    this.uranusGroup.add(this.uranus)
+
+    this.neptunePlanet = new Planet(3, 100,"img/neptune.jpg"); 
+    this.neptune = this.neptunePlanet.getMesh(); 
+    this.neptuneGroup.add(this.neptune)
 
     //Load textures
     let materialArray = []; 
@@ -93,12 +110,10 @@ export default class Scene extends Vue {
       materialArray[i].side = THREE.BackSide; 
     }
 
-
     //Background
     this.skyBoxGeo = new THREE.BoxGeometry(700, 700, 700);
     this.skyBoxMaterial = new THREE.MeshBasicMaterial({color:0x00ff00})
     this.skyBox = new THREE.Mesh(this.skyBoxGeo, materialArray);
-    
   }
 
   created(){
@@ -109,6 +124,7 @@ export default class Scene extends Vue {
     this.init(); 
     const solarSystem = new THREE.Group(); 
     const container = this.$refs.scene as Element;
+  
     this.camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 45, 30000); 
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio); 
@@ -116,27 +132,31 @@ export default class Scene extends Vue {
  
     container.appendChild(this.renderer.domElement);
 
-    solarSystem.add(this.jupiter, this.earth, this.venus, this.sun, this.mars, this.mercure, this.saturne, this.neptune, this.uranus, this.skyBox)
-    this.scene.add (solarSystem);
+    solarSystem.add(this.sun, this.mercuryGroup, this.venusGroup, this.earthGroup, this.marsGroup, this.jupiterGroup, this.saturneGroup, this.uranusGroup, this.neptuneGroup)
+    this.scene.add(this.skyBox, solarSystem);
   
     this.camera.position.setZ(100);
     this.camera.position.setX(1);
 
+    // this.mercuryContainer.position.set(this.moonOrbitRadius, 0, 0);
+    // this.sunContainer.position.set(this.sunOrbitRadius, 0, 0);
+    const EARTH_YEAR = 2 * Math.PI * (1/60) * (1/60); 
     const animate = () => {
-      requestAnimationFrame(animate);
-      this.sunPlanet.rotatePlanete(this.sun)
-      this.mercurePlanet.rotatePlanete(this.mercure)
-      this.venusPlanet.rotatePlanete(this.venus)
-      this.earthPlanet.rotatePlanete(this.earth)
-      this.marsPlanet.rotatePlanete(this.mars)
-      this.jupiterPlanet.rotatePlanete(this.jupiter)
-      this.saturnePlanet.rotatePlanete(this.saturne)
-      this.uranusPlanet.rotatePlanete(this.uranus)
-      this.neptunePlanet.rotatePlanete(this.neptune)
+     
 
+      this.sun.rotation.y += 0.001; 
+      this.mercuryGroup.rotation.y += EARTH_YEAR / 0.16 ; 
+      this.venusGroup.rotation.y += EARTH_YEAR / 0.70; 
+      this.earthGroup.rotation.y += EARTH_YEAR; 
+      this.marsGroup.rotation.y += EARTH_YEAR / 1.88 ; 
+      this.jupiterGroup.rotation.y += EARTH_YEAR / 12; 
+      this.saturneGroup.rotation.y += EARTH_YEAR / 29; 
+      this.uranusGroup.rotation.y += EARTH_YEAR / 84;
+      this.saturneGroup.rotation.y += EARTH_YEAR / 165;  
+     
       this.skyBox.rotation.y += 0.001;
 
-      this.scene.background = this.backgroundScene; 
+       requestAnimationFrame(animate);
       this.renderer.render(this.scene, this.camera);
    };
    animate();
