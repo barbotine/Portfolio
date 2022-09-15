@@ -43,7 +43,6 @@ export default class Planet {
     }
 
     selfRotation() : void {
-        this.mesh.rotation.x += this.rotationPlanet;
         this.mesh.rotation.y += this.rotationPlanet;
     }
 
