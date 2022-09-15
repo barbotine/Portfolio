@@ -1,0 +1,14 @@
+Planete
+- rotation speed
+- distance from sun 
+- rotation around sun number earth year
+- radius
+Mesh 
+	textureFile
+	geometry
+	material
+- construction
+- createMesh() : return mesh
+- create group() : return group
+- addRotationLocal() : void
+- addRotationGlobal() : void
