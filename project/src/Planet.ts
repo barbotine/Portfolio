@@ -1,6 +1,4 @@
 import * as THREE from "three"; 
-import { Mesh } from "three";
-
 
 export default class Planet {
     private rotationPlanet! : number; 
