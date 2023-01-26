@@ -7,6 +7,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueRouter from 'vue-router'
 import Creation from './components/creation'
 import Scene from './components/scene'
+import Cv from './components/cv'
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
@@ -17,8 +18,8 @@ const router = new VueRouter({
   mode : 'history', 
   routes : [
       { path :'/Creation', name : 'Creation', component : Creation },
-      { path : '/', name : 'Scene', component : Scene }
-
+      { path : '/', name : 'Scene', component : Scene },
+      { path : '/Cv', name : 'Cv', component : Cv }
   ]
 })
 

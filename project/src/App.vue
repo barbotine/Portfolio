@@ -1,22 +1,21 @@
 <template>
   <div id="app">
-    <p> coucou </p>
     <nav>
     <router-link to="/Creation">Coucou</router-link>
+    <router-link to="/Cv">Je suis le cv</router-link>
     </nav>
-    <Scene/>
     <router-view/>
+    <Scene/>
   </div>
 </template>
 
 <script>
 import Scene from "./components/scene.vue";
-import Creation from "./components/creation.vue"; 
 
 export default {
   name: "App",
   components: {
-    Scene 
+    Scene
   }
 };
 

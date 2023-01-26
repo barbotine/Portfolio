@@ -1,12 +1,12 @@
 <template>
-  <div class="creation" ref="creation"></div>
+  <div class="cv" ref="cv"></div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-@Component<Creation>({
+@Component<Cv>({
 })
-export default class Creation extends Vue {
+export default class Cv extends Vue {
 
 
 }
