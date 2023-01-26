@@ -1,17 +1,7 @@
-import { createRouter } from "vue-router";
-import { createWebHashHistory } from "vue-router";
-import Creation from "../components/creation.vue"; 
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import {createWebHashHistory } from 'vue-router'
+import Creation from '../components/creation'
 
-const routes = [{
-    path :'/3DCreation', 
-    name : '3DCreation',
-    component : Creation, 
-}
-]
 
-const router = createRouter({
-    history: createWebHashHistory(), 
-    router
-})
 
-export default router

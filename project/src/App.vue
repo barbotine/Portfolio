@@ -1,26 +1,24 @@
 <template>
   <div id="app">
+    <p> coucou </p>
     <nav>
-    <router-link to="/3DCreation">Coucou</router-link>
+    <router-link to="/Creation">Coucou</router-link>
     </nav>
     <Scene/>
-    <navigationBar/>
     <router-view/>
   </div>
 </template>
 
 <script>
 import Scene from "./components/scene.vue";
-import navigationBar from "./components/navigationBar.vue"; 
+import Creation from "./components/creation.vue"; 
 
 export default {
   name: "App",
   components: {
-    navigationBar, 
-    Scene
+    Scene 
   }
 };
-
 
 </script>
 
