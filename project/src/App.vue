@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <navigationBar/>
+    <nav>
+    <router-link to="/3DCreation">Coucou</router-link>
+    </nav>
     <Scene/>
+    <navigationBar/>
+    <router-view/>
   </div>
 </template>
 
