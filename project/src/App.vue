@@ -3,20 +3,16 @@
     <nav>
     <router-link to="/Creation">Coucou</router-link>
     <router-link to="/Cv">Je suis le cv</router-link>
+    <router-link to="/"></router-link>
     </nav>
     <router-view/>
-    <Scene/>
   </div>
 </template>
 
 <script>
-import Scene from "./components/scene.vue";
 
 export default {
   name: "App",
-  components: {
-    Scene
-  }
 };
 
 </script>

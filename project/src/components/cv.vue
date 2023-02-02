@@ -7,8 +7,6 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component<Cv>({
 })
 export default class Cv extends Vue {
-
-
 }
 
 </script>

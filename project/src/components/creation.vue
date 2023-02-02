@@ -1,5 +1,5 @@
 <template>
-  <div class="creation" ref="creation"></div>
+  <div class="creation" ref="creation"><p>Je suis là</p></div>
 </template>
 
 <script lang="ts">

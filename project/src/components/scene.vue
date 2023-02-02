@@ -32,7 +32,7 @@ export default class Scene extends Vue {
     this.init(); 
     this.scene.add(this.skyBox, this.sun, ...this.getAllGroups());
     this.animate();
-  }
+  } 
 
   init(){
     this.initSun();
@@ -104,6 +104,10 @@ export default class Scene extends Vue {
     return groups; 
   }
 
+  beforeDestroy(){
+    this.container.destroy()
+    this.quitComponent = true; 
+  }
 }
 </script>
 <style scoped lang="scss">
