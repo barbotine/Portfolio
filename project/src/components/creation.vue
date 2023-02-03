@@ -54,7 +54,7 @@ export default class Creation extends Vue {
 
   initCamera(){
     this.camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000); 
-    this.camera.position.z = 20; 
+    this.camera.position.z = 10; 
   }
 
   animate(){
@@ -68,8 +68,19 @@ export default class Creation extends Vue {
   init(){
     this.initRenderer(); 
     this.initCamera(); 
-    this.initCube(); 
+    //this.initCube(); 
     this.loadModel(); 
+    //this.initHelpers()
+    this.initLight(); 
+    
+  }
+
+  initLight(){
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+    this.scene.add( directionalLight );
+  }
+
+  initHelpers(){
     const axesHelper = new THREE.AxesHelper( 5 );
     this.scene.add( axesHelper );
   }
