@@ -24,13 +24,14 @@ export default {
   }
 
   #nav {
-    background-color: #FFFFFF;
+    background-color: #000000;
     display : flex; 
+    justify-content : center
   }
 
   .element{
     display: block;
-    color: black;
+    color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
