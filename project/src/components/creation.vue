@@ -1,5 +1,5 @@
 <template>
-  <div class="creation" ref="creation"><p>Je suis là</p></div>
+  <div class="creation" ref="creation"></div>
 </template>
 
 <script lang="ts">
@@ -31,7 +31,6 @@ export default class Creation extends Vue {
   mounted(){
     this.init(); 
     this.animate();
-    
   }
 
   initRenderer(){
@@ -49,7 +48,6 @@ export default class Creation extends Vue {
 
   initCube(){
     this.scene.add(this.cube)
-    console.log("Je rentre dans le cube"); 
   }
 
   initCamera(){
@@ -58,6 +56,8 @@ export default class Creation extends Vue {
   }
 
   animate(){
+    if(this.quitComponent)
+      return; 
     requestAnimationFrame(this.animate);
     this.cube.rotation.x += 0.1; 
     this.cube.rotation.y += 0.1; 
@@ -72,12 +72,13 @@ export default class Creation extends Vue {
     this.loadModel(); 
     //this.initHelpers()
     this.initLight(); 
-    
   }
 
   initLight(){
     const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
     this.scene.add( directionalLight );
+    const light = new THREE.AmbientLight( 0x404040 );
+    this.scene.add( light );
   }
 
   initHelpers(){
@@ -85,7 +86,7 @@ export default class Creation extends Vue {
     this.scene.add( axesHelper );
   }
 
-beforeDestroy(){
+  beforeDestroy(){
     this.quitComponent = true; 
   }
 }
