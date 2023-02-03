@@ -27,6 +27,7 @@ export default class Scene extends Vue {
   private neptune : Planet; 
   private skyBox : THREE.Mesh; 
   private planets : Planet[] = []; 
+  private quitComponent : boolean; 
 
   mounted(){
     this.init(); 
@@ -36,7 +37,6 @@ export default class Scene extends Vue {
 
   init(){
     this.initSun();
-    this.initPlanet(); 
     this.skyBox = this.createBackground(); 
     this.initRenderer()
     this.initCamera(); 
@@ -50,7 +50,8 @@ export default class Scene extends Vue {
     this.sun = new THREE.Mesh(geometrySun, materialSun)
   }
 
-  initPlanet(){
+  constructor(){
+    super();
     this.mercury = new Planet(0.40, 20, 0.001, 2, "img/mercure.jpg"); 
     this.venus = new Planet(0.70, 25, 0.001, 2 , "img/venus.jpg");
     this.earth = new Planet(1, 35, 0.001, 5, "img/earth.jpg");
@@ -59,6 +60,8 @@ export default class Scene extends Vue {
     this.neptune = new Planet(7, 85, 0.001, 4,  "img/neptune.jpg" ); 
     this.saturne = new Planet(3, 65, 0.001, 2,  "img/saturne.jpg" ); 
     this.uranus = new Planet(3,70, 0.001, 4, "img/uranus.jpg");
+    this.skyBox = new THREE.Mesh(); 
+    this.quitComponent = false; 
     this.planets.push(this.mercury, this.venus, this.earth, this.mars, this.jupiter, this.saturne, this.uranus, this.neptune); 
   }
 
@@ -105,7 +108,6 @@ export default class Scene extends Vue {
   }
 
   beforeDestroy(){
-    this.container.destroy()
     this.quitComponent = true; 
   }
 }
