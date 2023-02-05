@@ -5,8 +5,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import * as THREE from 'three'; 
-import Planet from '../Planet'
-import Background from '../Background'
+import Planet from '@/Planet'
+import Background from '@/Background'
 import { Group, SphereGeometry } from 'three';
  
 @Component<Scene>({

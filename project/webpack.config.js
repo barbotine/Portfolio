@@ -7,7 +7,13 @@ module.exports = {
             test: /\.(glsl|vs|fs)$/,
             loader: 'ts-shader-loader'
         }
-    ]
+    ],
+    resolve: {
+        extensions: ['.js', '.vue', '.json'],
+        alias: {
+          '@': path.resolve('src'),
+        }
+    },
 
 };
 

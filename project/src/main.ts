@@ -5,9 +5,9 @@ import  { BootstrapVue} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueRouter from 'vue-router'
-import Creation from './components/creation'
-import Scene from './components/scene'
-import Cv from './components/cv'
+import Creation from './components/creation.vue'
+import Scene from './components/scene.vue'
+import Cv from './components/cv.vue'
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)

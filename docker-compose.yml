@@ -3,7 +3,7 @@ volumes:
   node_modules:
 services : 
   vue:
-    image : louneah/vue-typescript-bootstrap
+    image : vue:node
     container_name : vue
     volumes :
       - ./project:/project
