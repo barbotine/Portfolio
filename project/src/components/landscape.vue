@@ -1,5 +1,5 @@
 <template>
-  <div class="creation" ref="creation"></div>
+  <div class="landscape" ref="landscape"></div>
 </template>
 
 <script lang="ts">
@@ -9,9 +9,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Object3D } from 'three';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
-@Component<Creation>({
+@Component<Landscape>({
 })
-export default class Creation extends Vue {
+export default class Landscape extends Vue {
   private camera = new THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
   private scene: THREE.Scene = new THREE.Scene();
@@ -43,7 +43,7 @@ export default class Creation extends Vue {
   }
 
   initRenderer(){
-    const container = this.$refs.creation as Element;
+    const container = this.$refs.landscape as Element;
     this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(this.renderer.domElement);
@@ -127,7 +127,7 @@ export default class Creation extends Vue {
 
 </script>
 <style scoped lang="scss">
-.creation {
+.landscape {
   width: 100%;
   height: 100%;
 }
