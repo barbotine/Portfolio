@@ -24,7 +24,7 @@ export default class Creation extends Vue {
   private objectTree2 : THREE.Object3D; 
   private objectTree3 : THREE.Object3D; 
   private objectRequin : THREE.Object3D; 
-  private orbit : any; 
+  private controls : any; 
 
   constructor(){
     super();
@@ -37,6 +37,7 @@ export default class Creation extends Vue {
 
   mounted(){
     this.init(); 
+    this.initOrbitControls(); 
     this.animate();
   }
 
@@ -80,14 +81,15 @@ export default class Creation extends Vue {
   }
 
   initOrbitControls(){
-    this.orbit = new OrbitControls( this.camera, this.renderer.domElement );
-    this.orbit.update();
+    this.controls = new OrbitControls( this.camera, this.renderer.domElement );
+    this.controls.update();
   }
 
   animate(){
     if(this.quitComponent)
       return; 
     requestAnimationFrame(this.animate);
+    this.controls.update(); 
     this.objectTree.rotation.y += 0.001;
     this.objectTree2.rotation.y += 0.001;
     this.objectTree3.rotation.y += 0.001;
@@ -108,8 +110,8 @@ export default class Creation extends Vue {
     const light = new THREE.AmbientLight( 0x404040 );
     this.scene.add( light );
     const pointLight = new THREE.PointLight( 0xff0000, 1, 100 );
-    light.position.set( -20, 10, 0 );
-    this.scene.add( light );
+    light.position.set( -30, 10, 0 );
+    this.scene.add(pointLight);
   }
 
   initHelpers(){

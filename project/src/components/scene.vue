@@ -29,6 +29,7 @@ export default class Scene extends Vue {
   private planets : Planet[] = []; 
   private quitComponent : boolean; 
 
+
   mounted(){
     this.init(); 
     this.scene.add(this.skyBox, this.sun, ...this.getAllGroups());
@@ -76,7 +77,7 @@ export default class Scene extends Vue {
 
    initCamera(){
     this.camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 45, 30000); 
-    this.camera.position.setZ(120);
+    this.camera.position.setZ(150);
     this.camera.position.setX(1);
   }
 
