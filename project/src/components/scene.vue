@@ -83,7 +83,6 @@ export default class Scene extends Vue {
   animate(){
     this.sun.rotation.y += 0.001; 
     this.rotateAllPlanet(); 
-    this.skyBox.rotation.y += 0.001;
     requestAnimationFrame(this.animate);
     this.renderer.render(this.scene, this.camera);
   }
