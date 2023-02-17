@@ -37,6 +37,7 @@ export default class Creation extends Vue {
 
   mounted(){
     this.init(); 
+    this.initScene(); 
     this.initOrbitControls(); 
     this.animate();
   }
@@ -47,6 +48,10 @@ export default class Creation extends Vue {
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(this.renderer.domElement);
   } 
+
+  initScene(){
+    this.scene.background = new THREE.Color( 0xADD8E6);
+  }
 
   async loadModel(){
     const tree = await this.loader.loadAsync( './tree-low-poly-3.glb'); 
