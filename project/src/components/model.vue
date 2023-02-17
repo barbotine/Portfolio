@@ -7,6 +7,9 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component<Model>({
 })
 export default class Model extends Vue {
+    mounted(){
+        console.log("coucou"); 
+    }
 }
   
 </script>
