@@ -8,7 +8,8 @@ import * as THREE from 'three';
 import Planet from '@/Planet'
 import Background from '@/Background'
 import { Group, SphereGeometry } from 'three';
- 
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+
 @Component<Scene>({
 })
 export default class Scene extends Vue {
@@ -28,11 +29,12 @@ export default class Scene extends Vue {
   private skyBox : THREE.Mesh; 
   private planets : Planet[] = []; 
   private quitComponent : boolean; 
-
+  private controls : any; 
 
   mounted(){
     this.init(); 
     this.scene.add(this.skyBox, this.sun, ...this.getAllGroups());
+    this.initOrbitControls(); 
     this.animate();
   } 
 
@@ -84,8 +86,14 @@ export default class Scene extends Vue {
   animate(){
     this.sun.rotation.y += 0.001; 
     this.rotateAllPlanet(); 
-    requestAnimationFrame(this.animate);
+    requestAnimationFrame(this.animate); 
+    this.controls.update(); 
     this.renderer.render(this.scene, this.camera);
+  }
+
+  initOrbitControls(){
+    this.controls = new OrbitControls( this.camera, this.renderer.domElement );
+    this.controls.update();
   }
 
   rotateAllPlanet(){
