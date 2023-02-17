@@ -21,8 +21,6 @@ export default class Landscape extends Vue {
   private loader = new GLTFLoader();
   private quitComponent : boolean; 
   private objectTree : THREE.Object3D; 
-  private objectTree2 : THREE.Object3D; 
-  private objectTree3 : THREE.Object3D; 
   private objectRequin : THREE.Object3D; 
   private controls : any; 
 
@@ -30,8 +28,6 @@ export default class Landscape extends Vue {
     super();
     this.quitComponent = false; 
     this.objectTree = new Object3D(); 
-    this.objectTree2 = new Object3D(); 
-    this.objectTree3 = new Object3D(); 
     this.objectRequin = new Object3D(); 
   }
 
@@ -55,25 +51,16 @@ export default class Landscape extends Vue {
 
   async loadModel(){
     const tree = await this.loader.loadAsync( './tree-low-poly-3.glb'); 
-    const tree2 = await this.loader.loadAsync( './tree-low-poly.glb'); 
-    const tree3 = await this.loader.loadAsync( './tree-low-poly-2.glb'); 
     const requin = await this.loader.loadAsync('./requin.glb')
     this.scene.add(tree.scene); 
     this.scene.add(requin.scene); 
-    //this.scene.add(tree2.scene); 
-    //this.scene.add(tree3.scene); 
     this.objectTree = tree.scene; 
     this.objectRequin = requin.scene; 
-    this.objectTree2 = tree2.scene; 
-    this.objectTree3 = tree3.scene; 
     this.positionObject(); 
-
   }
 
   positionObject(){ 
     this.objectRequin.position.y = -10; 
-    this.objectTree2.position.x = -10; 
-    this.objectTree3.position.x = 10; 
   }
 
   initCube(){
@@ -97,8 +84,6 @@ export default class Landscape extends Vue {
     requestAnimationFrame(this.animate);
     this.controls.update(); 
     this.objectTree.rotation.y += 0.001;
-    this.objectTree2.rotation.y += 0.001;
-    this.objectTree3.rotation.y += 0.001;
     this.objectRequin.rotation.y += 0.001;
     this.renderer.render(this.scene, this.camera);
   }
