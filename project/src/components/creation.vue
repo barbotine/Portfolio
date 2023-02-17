@@ -77,7 +77,7 @@ export default class Creation extends Vue {
 
   initCamera(){
     this.camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000); 
-    this.camera.position.z = 10; 
+    this.camera.position.z = 20; 
     this.camera.position.y = 5; 
   }
 
@@ -106,13 +106,8 @@ export default class Creation extends Vue {
   }
 
   initLight(){
-    const directionalLight = new THREE.DirectionalLight( 0xffffff);
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 2);
     this.scene.add( directionalLight );
-    const light = new THREE.AmbientLight( 0x404040 );
-    this.scene.add( light );
-    const pointLight = new THREE.PointLight( 0xff0000, 1, 100 );
-    light.position.set( 60, 10, 0 );
-    this.scene.add(pointLight);
   }
 
   initHelpers(){
