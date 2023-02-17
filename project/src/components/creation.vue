@@ -55,20 +55,20 @@ export default class Creation extends Vue {
     const requin = await this.loader.loadAsync('./requin.glb')
     this.scene.add(tree.scene); 
     this.scene.add(requin.scene); 
-    this.scene.add(tree2.scene); 
-    this.scene.add(tree3.scene); 
+    //this.scene.add(tree2.scene); 
+    //this.scene.add(tree3.scene); 
     this.objectTree = tree.scene; 
     this.objectRequin = requin.scene; 
     this.objectTree2 = tree2.scene; 
     this.objectTree3 = tree3.scene; 
-    this.objectRequin.position.y = -10; 
-    this.objectTree2.position.x = -20; 
-    this.objectTree3.position.x = 20; 
+    this.positionObject(); 
+
   }
 
-  positionObject(){
+  positionObject(){ 
     this.objectRequin.position.y = -10; 
     this.objectTree2.position.x = -10; 
+    this.objectTree3.position.x = 10; 
   }
 
   initCube(){
@@ -77,7 +77,8 @@ export default class Creation extends Vue {
 
   initCamera(){
     this.camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000); 
-    this.camera.position.z = 30; 
+    this.camera.position.z = 10; 
+    this.camera.position.y = 5; 
   }
 
   initOrbitControls(){
@@ -110,7 +111,7 @@ export default class Creation extends Vue {
     const light = new THREE.AmbientLight( 0x404040 );
     this.scene.add( light );
     const pointLight = new THREE.PointLight( 0xff0000, 1, 100 );
-    light.position.set( -30, 10, 0 );
+    light.position.set( 60, 10, 0 );
     this.scene.add(pointLight);
   }
 
