@@ -6,8 +6,10 @@
   import { Component, Vue } from 'vue-property-decorator';
   import * as THREE from 'three';
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-  import { Object3D } from 'three';
+  import { Mesh, Object3D } from 'three';
   import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+  import { __values } from 'tslib';
+
   
   @Component<Model>({
   })
@@ -20,15 +22,33 @@
     private cube = new THREE.Mesh(this.cubeGeometry, this.cubeMaterial); 
     private loader = new GLTFLoader();
     private quitComponent : boolean; 
-    private objectTree : THREE.Object3D; 
     private objectRequin : THREE.Object3D; 
     private controls : any; 
+
+    private objectWater : THREE.Object3D; 
   
+    private _VS = `
+    varying vec3 v_Normal; 
+
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); 
+      v_Normal = normal; 
+    }
+    `; 
+    
+    private _FS = `
+
+    varying vec3 v_Normal; 
+
+    void main() {
+      gl_FragColor = vec4(v_Normal, 1.0);
+    }
+    `; 
     constructor(){
       super();
       this.quitComponent = false; 
-      this.objectTree = new Object3D(); 
       this.objectRequin = new Object3D(); 
+      this.objectWater = new Object3D();       
     }
   
     mounted(){
@@ -43,7 +63,7 @@
       this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
       this.renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(this.renderer.domElement);
-    } 
+    }
   
     initScene(){
       this.scene.background = new THREE.Color( 0xADD8E6);
@@ -53,6 +73,23 @@
       const requin = await this.loader.loadAsync('./requin.glb')
       this.scene.add(requin.scene); 
       this.objectRequin = requin.scene; 
+
+      //water
+      const water = await this.loader.loadAsync('./plane.glb')
+      this.scene.add(water.scene); 
+      this.objectWater = water.scene; 
+      this.objectWater.position.y = -2; 
+
+      this.objectWater.traverse(child => {
+        if(child instanceof Mesh) {
+          console.log("Je suis là")
+          child.material = new THREE.ShaderMaterial({ 
+          uniforms : {}, 
+          vertexShader : this._VS, 
+          fragmentShader : this._FS,
+        }); 
+      }
+      })
     }
   
     initCube(){
@@ -80,9 +117,10 @@
   
     init(){
       this.initRenderer(); 
-      this.initCamera(); 
+      this.initCamera();
       this.loadModel(); 
       this.initLight(); 
+      this.initHelpers(); 
     }
   
     initLight(){
