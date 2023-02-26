@@ -6,9 +6,10 @@
   import { Component, Vue } from 'vue-property-decorator';
   import * as THREE from 'three';
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-  import { Mesh, Object3D } from 'three';
+  import { Mesh, Object3D, ShaderMaterial } from 'three';
   import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
   import { __values } from 'tslib';
+
 
   
   @Component<Model>({
@@ -25,23 +26,19 @@
     private objectRequin : THREE.Object3D; 
     private controls : any; 
 
+    //water
     private objectWater : THREE.Object3D; 
   
     private _VS = `
-    varying vec3 v_Normal; 
-
     void main() {
+      vec3 scale = vec3(4.0, 1.0, 1.0)
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); 
-      v_Normal = normal; 
     }
     `; 
     
     private _FS = `
-
-    varying vec3 v_Normal; 
-
     void main() {
-      gl_FragColor = vec4(v_Normal, 1.0);
+      gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
     }
     `; 
     constructor(){
@@ -65,6 +62,19 @@
       container.appendChild(this.renderer.domElement);
     }
   
+    initSphere(){
+      const s2 = new THREE.Mesh(
+        new THREE.SphereGeometry(2, 32, 32), 
+        new ShaderMaterial({ 
+          uniforms : {}, 
+          vertexShader : this._VS, 
+          fragmentShader : this._FS,
+        })
+      )
+      s2.position.y = 5; 
+      this.scene.add(s2)
+    }
+
     initScene(){
       this.scene.background = new THREE.Color( 0xADD8E6);
     }
@@ -80,16 +90,16 @@
       this.objectWater = water.scene; 
       this.objectWater.position.y = -2; 
 
-      this.objectWater.traverse(child => {
-        if(child instanceof Mesh) {
-          console.log("Je suis là")
-          child.material = new THREE.ShaderMaterial({ 
-          uniforms : {}, 
-          vertexShader : this._VS, 
-          fragmentShader : this._FS,
-        }); 
-      }
-      })
+      // this.objectWater.traverse(child => {
+      //   if(child instanceof Mesh){
+      //   console.log("Je suis là")
+      //   child.material = new THREE.ShaderMaterial({ 
+      //   uniforms : {}, 
+      //   vertexShader : require('../shader/vertexShader.glsl'), 
+      //   fragmentShader : require('../shader/fragmentShader.glsl'),
+      //   }); 
+      // }
+      // })  
     }
   
     initCube(){
@@ -117,6 +127,7 @@
   
     init(){
       this.initRenderer(); 
+      this. initSphere(); 
       this.initCamera();
       this.loadModel(); 
       this.initLight(); 

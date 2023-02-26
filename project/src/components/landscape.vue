@@ -48,7 +48,7 @@ export default class Landscape extends Vue {
   }
 
   async loadModel(){
-    const tree = await this.loader.loadAsync( './tree-low-poly-3.glb'); 
+    const tree = await this.loader.loadAsync( './forest.glb'); 
     this.scene.add(tree.scene); 
     this.objectTree = tree.scene; 
   }
