@@ -28,26 +28,34 @@
 
     //water
     private objectWater : THREE.Object3D; 
-  
-    private _VS = `
-    void main() {
-      vec3 scale = vec3(4.0, 1.0, 1.0)
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); 
-    }
-    `; 
-    
-    private _FS = `
-    void main() {
-      gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-    }
-    `; 
+
     constructor(){
       super();
       this.quitComponent = false; 
       this.objectRequin = new Object3D(); 
       this.objectWater = new Object3D();       
     }
-  
+ 
+  vertexShader()
+  {
+    return `
+    void main()
+    {
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+    `;
+  }
+
+  fragmentShader()
+  {
+  return `
+      void main()
+      {
+         gl_FragColor = vec4( 1.0, 1.0, 0.0, 1.0);
+      }
+  `;
+  }
+
     mounted(){
       this.init(); 
       this.initScene(); 
@@ -67,8 +75,8 @@
         new THREE.SphereGeometry(2, 32, 32), 
         new ShaderMaterial({ 
           uniforms : {}, 
-          vertexShader : this._VS, 
-          fragmentShader : this._FS,
+          vertexShader : this.vertexShader(),  
+          fragmentShader : this.fragmentShader(),
         })
       )
       s2.position.y = 5; 
