@@ -26,7 +26,6 @@
     private controls : any; 
     private sky = new Sky();
 
-    private uniformData = 
 
     //water
     private objectWater : THREE.Object3D; 
@@ -133,7 +132,8 @@
   
     initCamera(){
       this.camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000); 
-      this.camera.position.z = 10; 
+      this.camera.position.z = 30; 
+      this.camera.position.y = 10; 
     }
   
     initOrbitControls(){

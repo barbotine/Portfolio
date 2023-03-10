@@ -59,8 +59,8 @@ export default class Landscape extends Vue {
 
   initCamera(){
     this.camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000); 
-    this.camera.position.z = 20; 
-    this.camera.position.y = 5; 
+    this.camera.position.z = 30; 
+    this.camera.position.y = 30; 
   }
 
   initOrbitControls(){
