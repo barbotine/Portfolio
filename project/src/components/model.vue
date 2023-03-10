@@ -42,9 +42,13 @@
   vertexShader()
   {
     return `
+    uniform float u_time; 
+    
     void main()
     {
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position.x, sin(position.z) + position.y, position.z, 1.0);
+      vec4 result; 
+      result = vec4(position.x, position.y + sin(position.z + u_time) , position.z, 1.0);
+      gl_Position = projectionMatrix * modelViewMatrix * result; 
     }
     `;
   }
@@ -78,7 +82,7 @@
   
     initRenderer(){
       const container = this.$refs.model as Element;
-      this.uniformData.u_time.value = this.clock.getElapsedTime(); 
+      console.log(this.uniformData.u_time.value)
       this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
       this.renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(this.renderer.domElement);
@@ -112,6 +116,7 @@
     initWater(){
       const geometry = new THREE.BoxGeometry(50, 5, 50, 50, 50, 50);
       const material = new THREE.ShaderMaterial({ 
+        wireframe : true,
         side :THREE.DoubleSide, 
         uniforms : this.uniformData, 
         vertexShader : this.vertexShader(), 
@@ -120,14 +125,12 @@
       const plane = new THREE.Mesh( geometry, material );
       this.scene.add(plane)
     }
-
     
     async loadModel(){
       const requin = await this.loader.loadAsync('./requin.glb')
       this.scene.add(requin.scene); 
       this.objectRequin = requin.scene; 
       this.objectRequin.position.y = 5;  
-
     }
   
     initCube(){
@@ -148,6 +151,7 @@
     animate(){
       if(this.quitComponent)
         return; 
+      this.uniformData.u_time.value = this.clock.getElapsedTime(); 
       requestAnimationFrame(this.animate);
       this.controls.update(); 
       this.objectRequin.rotation.y += 0.001;
