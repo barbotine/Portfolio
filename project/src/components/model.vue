@@ -26,6 +26,8 @@
     private controls : any; 
     private sky = new Sky();
 
+    private uniformData = 
+
     //water
     private objectWater : THREE.Object3D; 
 
@@ -41,7 +43,7 @@
     return `
     void main()
     {
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position.x, sin(position.z) + position.y, position.z, 1.0);
     }
     `;
   }
@@ -51,7 +53,7 @@
   return `
       void main()
       {
-         gl_FragColor = vec4( 1.0, 1.0, 0.0, 1.0);
+         gl_FragColor = vec4( 0.0, 0.0, 1.0, 0.3);
       }
   `;
   }
@@ -68,9 +70,9 @@
       this.initCamera();
       this.loadModel(); 
       this.initLight(); 
-      this.initHelpers(); 
       this.initSky(); 
       this.initSun(); 
+      this.initWater(); 
     }
   
     initRenderer(){
@@ -90,7 +92,6 @@
     }
 
     initSun(){
- 
       const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
       const sun = new THREE.Vector3();
 
@@ -105,29 +106,25 @@
       this.scene.environment = pmremGenerator.fromScene(this.scene).texture;
       return sun;
     } 
+
+    initWater(){
+      const geometry = new THREE.BoxGeometry(50, 5, 50, 50, 50, 50);
+      const material = new THREE.ShaderMaterial({ 
+        side :THREE.DoubleSide, 
+        vertexShader : this.vertexShader(), 
+        fragmentShader : this.fragmentShader()
+        }); 
+      const plane = new THREE.Mesh( geometry, material );
+      this.scene.add(plane)
+    }
+
     
-  
     async loadModel(){
       const requin = await this.loader.loadAsync('./requin.glb')
       this.scene.add(requin.scene); 
       this.objectRequin = requin.scene; 
+      this.objectRequin.position.y = 5;  
 
-      //water
-      const water = await this.loader.loadAsync('./plane.glb')
-      this.scene.add(water.scene); 
-      this.objectWater = water.scene; 
-      this.objectWater.position.y = -2; 
-
-      this.objectWater.traverse(child => {
-        if(child instanceof Mesh){
-        console.log("Je suis là")
-        child.material = new THREE.ShaderMaterial({ 
-        uniforms : {}, 
-        vertexShader : this.vertexShader(), 
-        fragmentShader : this.fragmentShader()
-        }); 
-      }
-      })  
     }
   
     initCube(){
