@@ -6,7 +6,7 @@
   import { Component, Vue } from 'vue-property-decorator';
   import * as THREE from 'three';
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-  import { Mesh, Object3D, ShaderMaterial } from 'three';
+  import { Clock, Mesh, Object3D, ShaderMaterial } from 'three';
   import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
   import { __values } from 'tslib';
   import { Sky } from 'three/examples/jsm/objects/Sky.js';
@@ -25,16 +25,18 @@
     private objectRequin : THREE.Object3D; 
     private controls : any; 
     private sky = new Sky();
-
-
-    //water
-    private objectWater : THREE.Object3D; 
+    private clock = new Clock(); 
+    private uniformData = {
+      u_time : {
+        type : 'f', 
+        value : this.clock.getElapsedTime()
+      }
+    }
 
     constructor(){
       super();
       this.quitComponent = false; 
-      this.objectRequin = new Object3D(); 
-      this.objectWater = new Object3D();       
+      this.objectRequin = new Object3D();    
     }
  
   vertexShader()
@@ -76,6 +78,7 @@
   
     initRenderer(){
       const container = this.$refs.model as Element;
+      this.uniformData.u_time.value = this.clock.getElapsedTime(); 
       this.renderer = new THREE.WebGLRenderer({antialias : true, alpha : true}); 
       this.renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(this.renderer.domElement);
@@ -110,6 +113,7 @@
       const geometry = new THREE.BoxGeometry(50, 5, 50, 50, 50, 50);
       const material = new THREE.ShaderMaterial({ 
         side :THREE.DoubleSide, 
+        uniforms : this.uniformData, 
         vertexShader : this.vertexShader(), 
         fragmentShader : this.fragmentShader()
         }); 
