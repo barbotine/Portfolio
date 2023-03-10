@@ -9,9 +9,8 @@
   import { Mesh, Object3D, ShaderMaterial } from 'three';
   import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
   import { __values } from 'tslib';
+  import { Sky } from 'three/examples/jsm/objects/Sky.js';
 
-
-  
   @Component<Model>({
   })
   export default class Model extends Vue {
@@ -25,6 +24,7 @@
     private quitComponent : boolean; 
     private objectRequin : THREE.Object3D; 
     private controls : any; 
+    private sky = new Sky();
 
     //water
     private objectWater : THREE.Object3D; 
@@ -62,6 +62,16 @@
       this.initOrbitControls(); 
       this.animate();
     }
+
+    init(){
+      this.initRenderer(); 
+      this.initCamera();
+      this.loadModel(); 
+      this.initLight(); 
+      this.initHelpers(); 
+      this.initSky(); 
+      this.initSun(); 
+    }
   
     initRenderer(){
       const container = this.$refs.model as Element;
@@ -69,23 +79,33 @@
       this.renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(this.renderer.domElement);
     }
-  
-    initSphere(){
-      const s2 = new THREE.Mesh(
-        new THREE.SphereGeometry(2, 32, 32), 
-        new ShaderMaterial({ 
-          uniforms : {}, 
-          vertexShader : this.vertexShader(),  
-          fragmentShader : this.fragmentShader(),
-        })
-      )
-      s2.position.y = 5; 
-      this.scene.add(s2)
-    }
 
     initScene(){
       this.scene.background = new THREE.Color( 0xADD8E6);
     }
+
+    initSky(){
+      this.sky.scale.setScalar(100);
+      this.scene.add(this.sky);
+    }
+
+    initSun(){
+ 
+      const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+      const sun = new THREE.Vector3();
+
+      // Defining the x, y and z value for our 3D Vector
+      const theta = Math.PI * (0.49 - 0.5);
+      const phi = 2 * Math.PI * (0.205 - 0.5);
+      sun.x = Math.cos(phi);
+      sun.y = Math.sin(phi) * Math.sin(theta);
+      sun.z = Math.sin(phi) * Math.cos(theta);
+
+      this.sky.material.uniforms['sunPosition'].value.copy(sun);
+      this.scene.environment = pmremGenerator.fromScene(this.scene).texture;
+      return sun;
+    } 
+    
   
     async loadModel(){
       const requin = await this.loader.loadAsync('./requin.glb')
@@ -98,16 +118,16 @@
       this.objectWater = water.scene; 
       this.objectWater.position.y = -2; 
 
-      // this.objectWater.traverse(child => {
-      //   if(child instanceof Mesh){
-      //   console.log("Je suis là")
-      //   child.material = new THREE.ShaderMaterial({ 
-      //   uniforms : {}, 
-      //   vertexShader : require('../shader/vertexShader.glsl'), 
-      //   fragmentShader : require('../shader/fragmentShader.glsl'),
-      //   }); 
-      // }
-      // })  
+      this.objectWater.traverse(child => {
+        if(child instanceof Mesh){
+        console.log("Je suis là")
+        child.material = new THREE.ShaderMaterial({ 
+        uniforms : {}, 
+        vertexShader : this.vertexShader(), 
+        fragmentShader : this.fragmentShader()
+        }); 
+      }
+      })  
     }
   
     initCube(){
@@ -132,16 +152,7 @@
       this.objectRequin.rotation.y += 0.001;
       this.renderer.render(this.scene, this.camera);
     }
-  
-    init(){
-      this.initRenderer(); 
-      this. initSphere(); 
-      this.initCamera();
-      this.loadModel(); 
-      this.initLight(); 
-      this.initHelpers(); 
-    }
-  
+
     initLight(){
       const directionalLight = new THREE.DirectionalLight( 0xffffff, 2);
       this.scene.add( directionalLight );
