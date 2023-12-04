@@ -47,7 +47,7 @@
     void main()
     {
       vec4 result; 
-      result = vec4(position.x, position.y + sin(position.z + u_time) , position.z, 1.0);
+      result = vec4(position.x, position.y + sin(position.z + u_time)/2. , position.z, 1.0);
       gl_Position = projectionMatrix * modelViewMatrix * result; 
     }
     `;
@@ -56,10 +56,12 @@
   fragmentShader()
   {
   return `
-      void main()
-      {
-         gl_FragColor = vec4( 0.0, 0.0, 1.0, 0.3);
-      }
+  uniform vec3 uDepthColor;
+  uniform vec3 uSurfaceColor;
+    void main()
+    {
+      gl_FragColor = vec4(uDepthColor, 1.0);
+    }
   `;
   }
 
@@ -114,9 +116,9 @@
     } 
 
     initWater(){
+      const debugObject = {}
       const geometry = new THREE.BoxGeometry(50, 5, 50, 50, 50, 50);
       const material = new THREE.ShaderMaterial({ 
-        wireframe : true,
         side :THREE.DoubleSide, 
         uniforms : this.uniformData, 
         vertexShader : this.vertexShader(), 

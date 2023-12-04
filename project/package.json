@@ -20,6 +20,7 @@
     "vite": "^2.9.12",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
+    "vue-glsl": "^1.1.27",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.6.5",
     "vuex": "^3.4.0",
@@ -44,7 +45,7 @@
     "sass-loader": "^8.0.2",
     "ts-shader-loader": "^1.0.6",
     "typescript": "~4.1.5",
-    "vite-plugin-glsl": "^0.2.0",
+    "vite-plugin-glsl": "^0.2.2",
     "vite-plugin-string": "^1.1.2",
     "vue-template-compiler": "^2.6.11"
   }

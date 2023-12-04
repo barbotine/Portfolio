@@ -5,6 +5,7 @@
       <router-link class ="element" to="/Cv">CV</router-link>
       <router-link class ="element" to="/Landscape">Landscape</router-link>
       <router-link class ="element" to="/Model">Modèles 3D</router-link>
+      <router-link class ="element" to="/Render">Rendus</router-link>
     </nav>
     <router-view/>
   </div>
