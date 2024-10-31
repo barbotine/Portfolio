@@ -91,7 +91,7 @@ export default class Landscape extends Vue {
 
   initHelpers(){
     const axesHelper = new THREE.AxesHelper( 5 );
-    this.scene.add( axesHelper );
+    this.scene.add(axesHelper);
   }
 
   beforeDestroy(){

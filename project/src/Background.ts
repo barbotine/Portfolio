@@ -1,29 +1,26 @@
-import * as THREE from "three"; 
+import * as THREE from "three";
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 export default class Background{
-    getSkyBox(){
-      const materialArray : THREE.MeshBasicMaterial[] = []; 
-      const ft = new THREE.TextureLoader().load("img/background/space_bk.png");
-      const bk = new THREE.TextureLoader().load("img/background/space_dn.png");
-      const up = new THREE.TextureLoader().load("img/background/space_ft.png");
-      const dn = new THREE.TextureLoader().load("img/background/space_lf.png");
-      const rt = new THREE.TextureLoader().load("img/background/space_rt.png");
-      const lf = new THREE.TextureLoader().load("img/background/space_up.png");
+  async getSkyBox(){
+    const rgbeLoader = new RGBELoader();
+    const texture = await rgbeLoader.loadAsync('img/nebula.hdr')
+    texture.mapping = THREE.EquirectangularReflectionMapping;
 
-      materialArray.push(new THREE.MeshBasicMaterial({map : ft})); 
-      materialArray.push(new THREE.MeshBasicMaterial({map : bk}));
-      materialArray.push(new THREE.MeshBasicMaterial({map : up}));
-      materialArray.push(new THREE.MeshBasicMaterial({map : dn}));
-      materialArray.push(new THREE.MeshBasicMaterial({map : rt}));
-      materialArray.push(new THREE.MeshBasicMaterial({map : lf}));     
+    // Créer une géométrie de sphère
+    const geometry = new THREE.SphereGeometry(500, 60, 40)
 
-      for (let i = 0; i<6; i++){
-        materialArray[i].side = THREE.BackSide; 
-      }
+    // Créer un matériau avec la texture HDRI
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.BackSide
+    })
 
-      const skyBoxGeo = new THREE.BoxGeometry(700, 700, 700);
-      const skyBox = new THREE.Mesh(skyBoxGeo, materialArray);
-      return skyBox; 
+    // Créer la sphère et l'ajouter à la scène
+    const skySphere = new THREE.Mesh(geometry, material)
+    return  {
+      texture : texture,
+      skySphere : skySphere
     }
-    
+  }
 }

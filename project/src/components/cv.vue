@@ -14,17 +14,28 @@ export default class Cv extends Vue {
   private scene: THREE.Scene = new THREE.Scene();
   private skyBox : THREE.Mesh; 
   private quitComponent : boolean;
+  private earth = new THREE.Mesh(); 
 
   mounted(){
     this.init(); 
-    this.scene.add(this.skyBox); 
-    this.animate();
+    this.scene.add(this.skyBox, this.earth); 
+    this.animate(); 
+  }
+
+  initEarth(){
+    const geometryEarth = new THREE.SphereGeometry(15, 50, 50); 
+    const textureFile = "img/earth.jpg"; 
+    const textureEarth = new THREE.TextureLoader().load(textureFile);
+    const materialEarth = new THREE.MeshBasicMaterial({map : textureEarth}); 
+    this.earth = new THREE.Mesh(geometryEarth, materialEarth)
+    this.earth.position.z = 80; 
   }
 
   init(){
     this.skyBox = this.createBackground(); 
     this.initRenderer()
     this.initCamera(); 
+    this.initEarth(); 
   }
 
   constructor(){
@@ -51,9 +62,10 @@ export default class Cv extends Vue {
   animate(){
     requestAnimationFrame(this.animate); 
     this.renderer.render(this.scene, this.camera);
+    this.earth.rotation.y += 0.005; 
   }
 
-  createBackground() : THREE.Mesh {
+  createBackground() : THREE.Mesh{
     const background = new Background(); 
     return background.getSkyBox(); 
   }
@@ -62,7 +74,6 @@ export default class Cv extends Vue {
     this.quitComponent = true; 
   }
 }
-
 
 </script>
 <style scoped lang="scss">
