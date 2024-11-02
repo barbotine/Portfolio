@@ -29,7 +29,9 @@ export default class Scene extends Vue {
   private skyBox : THREE.Mesh; 
   private planets : Planet[] = []; 
   private quitComponent : boolean; 
-  private controls : any; 
+  private controls : any;
+  private raycaster = new THREE.Raycaster();
+  private mouse = new THREE.Vector2();
 
   async init(){
     this.initSun();
@@ -43,6 +45,7 @@ export default class Scene extends Vue {
     this.scene.add(this.skyBox, this.sun, ...this.getAllGroups());
     this.initOrbitControls(); 
     this.animate();
+    window.addEventListener('click', this.onClick.bind(this));
   } 
 
 
@@ -94,7 +97,26 @@ export default class Scene extends Vue {
 
   initOrbitControls(){
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+    // Limiter le zoom
+    this.controls.minDistance = 70; // valeur minimale de zoom
+    this.controls.maxDistance = 150; // valeur maximale de zoom
+
     this.controls.update();
+  }
+
+  onClick(event: MouseEvent){
+    this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+
+    const intersects = this.raycaster.intersectObjects(this.scene.children);
+
+    if (intersects.length > 0) {
+        const clickedObject = intersects[0].object;
+        
+    }
   }
 
   rotateAllPlanet(){
@@ -121,6 +143,7 @@ export default class Scene extends Vue {
 
   beforeDestroy(){
     this.quitComponent = true; 
+    window.removeEventListener('click', this.onClick.bind(this));
   }
 }
 </script>

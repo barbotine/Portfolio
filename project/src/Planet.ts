@@ -52,6 +52,4 @@ export default class Planet {
         this.selfRotation(); 
         this.systemRotation(); 
     }
-    
-
 }

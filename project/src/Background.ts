@@ -4,7 +4,7 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 export default class Background{
   async getSkyBox(){
     const rgbeLoader = new RGBELoader();
-    const texture = await rgbeLoader.loadAsync('img/nebula.hdr')
+    const texture = await rgbeLoader.loadAsync('img/night.hdr')
     texture.mapping = THREE.EquirectangularReflectionMapping;
 
     // Créer une géométrie de sphère

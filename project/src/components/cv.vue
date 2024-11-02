@@ -32,7 +32,7 @@ export default class Cv extends Vue {
   }
 
   init(){
-    this.skyBox = this.createBackground(); 
+    //this.skyBox = this.createBackground(); 
     this.initRenderer()
     this.initCamera(); 
     this.initEarth(); 
@@ -65,10 +65,10 @@ export default class Cv extends Vue {
     this.earth.rotation.y += 0.005; 
   }
 
-  createBackground() : THREE.Mesh{
-    const background = new Background(); 
-    return background.getSkyBox(); 
-  }
+  // async createBackground() : Promise<THREE.Mesh>{
+  //   const background = new Background(); 
+  //   return await background.getSkyBox(); 
+  // }
 
   beforeDestroy(){
     this.quitComponent = true; 
